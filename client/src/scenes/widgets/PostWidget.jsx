@@ -22,7 +22,10 @@ location,
 picturePath,
 userPicturePath,
 likes,
-comments
+comments,
+setIsChatUser,
+setChatUser,
+isProfile=false
 }) => {
     const [ isComments , setIsComments] = useState(false);
     const dispatch = useDispatch();
@@ -101,6 +104,9 @@ comments
                 name={name}
                 subtitle={location}
                 userPicturePath={userPicturePath}
+                setChatUser={setChatUser}
+                setIsChatUser={setIsChatUser}
+                isProfile={isProfile}
             />
             <Typography color={main} sx={{mt: "1rem"}}>
                 {description}

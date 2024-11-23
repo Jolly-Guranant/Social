@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { setFriends } from "../../state";
 
-const FriendlistWidget = ( {userId} )=> {
+const FriendlistWidget = ( {userId , setChatUser,setIsChatUser,isProfile=false} )=> {
     const dispatch = useDispatch();
     const { palette }= useTheme();
     const token = useSelector( (state) => state.token);
@@ -21,6 +21,14 @@ const FriendlistWidget = ( {userId} )=> {
         const data=await response.json();
         dispatch(setFriends({friends:data}));
     };
+    
+  
+
+    // const chattingCheck= (friendId)=>{
+
+    //     chattingWHO(friendId);
+
+    // }
 
     useEffect(() => {
         getFriends();
@@ -45,6 +53,9 @@ const FriendlistWidget = ( {userId} )=> {
                     name={`${friend.firstName} ${friend.lastName}`}
                     subtitle={friend.occuation}
                     userPicturePath={friend.picturePath}
+                    setChatUser={setChatUser}
+                    setIsChatUser={setIsChatUser}
+                    isProfile={isProfile}
                     />
                 ))}
 

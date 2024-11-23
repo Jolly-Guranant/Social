@@ -1,12 +1,13 @@
-import { PersonAddOutlined , PersonRemoveOutlined } from "@mui/icons-material"
+import { PersonAddOutlined , PersonRemoveOutlined  ,Message} from "@mui/icons-material"
 import { Box, IconButton,Typography,useTheme } from "@mui/material"
 import { useDispatch,useSelector } from "react-redux"
 import { setFriends } from "../state"
 import FlexBetween from "./FlexBetween"
 import UserImage from "./UserImage"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
-const Friend = ({friendId , name, subtitle, userPicturePath}) => {
+const Friend = ({friendId , name, subtitle, userPicturePath, setChatUser,setIsChatUser,isProfile=false}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { _id} = useSelector((state)=> state.user);
@@ -21,6 +22,7 @@ const Friend = ({friendId , name, subtitle, userPicturePath}) => {
 
     const isFriend = friends.find((friend)=> friend._id === friendId);
     const issame= Boolean(friendId ===_id);
+    const [isChatting,setIsChatting]=useState(false);
 
     const patchFriend = async () => {
         const response = await fetch (`http://localhost:3001/users/${_id}/${friendId}` , 
@@ -38,15 +40,15 @@ const Friend = ({friendId , name, subtitle, userPicturePath}) => {
     };
 
     return (
-        <FlexBetween>
+            <FlexBetween>
             <FlexBetween gap="1rem">
                 <UserImage image= {userPicturePath} size="55px" />
                 <Box
                      onClick = {() => {
                         navigate(`/profile/${friendId}`);
                         navigate(0);
-                     }}
-                     >
+                    }}
+                    >
                     <Typography 
                     color={main}
                     variant="h5"
@@ -65,7 +67,8 @@ const Friend = ({friendId , name, subtitle, userPicturePath}) => {
                     </Typography>
                 </Box>
             </FlexBetween>
-            { !issame &&
+            { !issame && (
+                <FlexBetween gap="1rem"> 
             <IconButton onClick={()=> patchFriend()}
                 sx={{backgroundColor : primaryLight , p: "0.6rem"}}>
 
@@ -74,9 +77,18 @@ const Friend = ({friendId , name, subtitle, userPicturePath}) => {
                     ) : (
                         <PersonAddOutlined sx={{color : primaryDark}} />
                     )}
-
-            </IconButton>}
+            </IconButton>
+            {!isProfile && 
+            <IconButton onClick={()=>{
+                setIsChatUser(true)
+                setChatUser(friendId)}}> 
+            <Message />
+            </IconButton>
+            }
+            </FlexBetween>
+            )}
         </FlexBetween>
+     
     )
 };
 

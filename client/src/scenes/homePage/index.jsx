@@ -1,15 +1,27 @@
-import { Box, useMediaQuery } from "@mui/material"
+import { Box, Typography, useMediaQuery } from "@mui/material"
 import Navbar from "../navbar";
 import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget";
 import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import FriendlistWidget from "../widgets/FriendListWidget";
+import { useEffect, useState } from "react";
+import FlexBetween from "../../components/FlexBetween";
+import Chat from "../widgets/Chat";
 
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width : 1000px)");
     const {_id, picturePath} = useSelector( (state) =>state.user);
+    const [ChatUser , setChatUser ] = useState("");
+    const [isChatUser , setIsChatUser ] = useState(false);
 
+    // const getChatUser=(friendId)=>{
+    //     setChatUser(friendId);
+    //     setisChatUser(true);
+    // }
+ 
+
+    
     return (
         <Box>
             <Navbar/>
@@ -26,15 +38,26 @@ const HomePage = () => {
 
                 <Box flexBasis={isNonMobileScreens ? "42%" : undefined}
                 mt={isNonMobileScreens ? undefined : "2rem"}>
-                    <MyPostWidget picturePath={picturePath}/>
-                    <PostsWidget userId={_id}/>      
+                    <MyPostWidget picturePath={picturePath} />
+                    <PostsWidget userId={_id} setChatUser={setChatUser} setIsChatUser={setIsChatUser}/>      
                 </Box>
                 {isNonMobileScreens && (
-                    <Box flexBasis="26%">
-                        <FriendlistWidget userId={_id} />
-                    </Box>
-                )}  
+                            <Box flexBasis="26%">
+                            <FriendlistWidget userId={_id} setChatUser={setChatUser} setIsChatUser={setIsChatUser} />
+                            </Box>
+                )         
+                }
+                {isChatUser &&(
+                    <Chat 
+                    friendId={ChatUser}
+                    bhang={setIsChatUser}
+                    bosda={isChatUser}
+                    ></Chat>
+                )}
+
+                
             </Box>
+
         </Box>
     )
 }
